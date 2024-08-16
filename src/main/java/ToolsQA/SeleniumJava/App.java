@@ -28,7 +28,7 @@ public class App
             throw new Exception("Incorrect Browser");
         }
 
-        drive.manage().window().maximize(); 
+        drive.manage().window().maximize();
 
     }
 }
