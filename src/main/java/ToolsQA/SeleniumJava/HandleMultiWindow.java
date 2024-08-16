@@ -26,7 +26,7 @@ public class HandleMultiWindow {
             if(popupTitle.equalsIgnoreCase("New Window")){
                String text = driver.findElement(By.xpath("//div[@class='example']/h3")).getText();
                 System.out.println(text);
-//                driver.close();       // close windown is active
+//                driver.close();       // close window is active
             }
 
         }
