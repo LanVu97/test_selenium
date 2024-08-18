@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
@@ -16,8 +17,9 @@ public class Login extends Base {
 
     WebDriver driver;
 
+    @BeforeMethod
     public void setUp(){
-        driver = initializeBroswerAndOpenAppUrl("chrome");
+        driver = initializeBroswerAndOpenAppUrl(prop.getProperty("broswername"));
         driver.findElement(By.xpath("//span[text()='My Account']")).click();
         driver.findElement(By.linkText("Login")).click();
     }
