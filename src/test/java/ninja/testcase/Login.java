@@ -21,13 +21,13 @@ import java.util.Date;
 public class Login extends Base {
 
     WebDriver driver;
-
+    LoginPage loginPage;
     @BeforeMethod
     public void setUp(){
         driver = initializeBroswerAndOpenAppUrl(prop.getProperty("broswername"));
         HomePage homePage = new HomePage(driver);
         homePage.clickOnMyAccount();
-        homePage.selectLoginOption();
+        loginPage = homePage.selectLoginOption();
 
     }
 
@@ -38,22 +38,13 @@ public class Login extends Base {
 
     @Test
     public void verifyLoginWithValidCredential(){
-
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterEmailAddress("lan123@gmail.com");
-        loginPage.enterPassword("123123");
-        loginPage.clickOnLoginButton();
-
-        AccountPage accountPage = new AccountPage(driver);
+        AccountPage accountPage = loginPage.login("lan123@gmail.com", "123123");
         Assert.assertTrue(accountPage.isAccountLinkDisplayed(), "The account page is not displayed");
     }
 
     @Test
     public void verifyLoginWithInvalidCredential(){
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterEmailAddress(Utilities.generateEmailwithTimeStamp());
-        loginPage.enterPassword("123123333");
-        loginPage.clickOnLoginButton();
+        loginPage.login(Utilities.generateEmailwithTimeStamp(), "123123333");
 
         String actualWarningMessage = loginPage.getEmailPasswordNotMatchingWarningText();
         String expectedWarningMessage = "Warning: No match for E-Mail Address and/or Password.";
@@ -62,10 +53,7 @@ public class Login extends Base {
 
     @Test
     public void verifyLoginWithInvalidEmailAndValidPassword(){
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterEmailAddress(Utilities.generateEmailwithTimeStamp());
-        loginPage.enterPassword("123123");
-        loginPage.clickOnLoginButton();
+        loginPage.login(Utilities.generateEmailwithTimeStamp(), "123123");
 
         String actualWarningMessage = loginPage.getEmailPasswordNotMatchingWarningText();
         String expectedWarningMessage = "Warning: No match for E-Mail Address and/or Password.";
@@ -74,10 +62,7 @@ public class Login extends Base {
 
     @Test
     public void verifyLoginWithValidEmailAndInvalidPassword(){
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterEmailAddress("lan1234@gmail.com");
-        loginPage.enterPassword("12312300");
-        loginPage.clickOnLoginButton();
+        loginPage.login("lan1234@gmail.com", "12312300");
 
         String actualWarningMessage = loginPage.getEmailPasswordNotMatchingWarningText();
         String expectedWarningMessage = "Warning: No match for E-Mail Address and/or Password.";
@@ -86,10 +71,7 @@ public class Login extends Base {
 
     @Test
     public void verifyLoginWithoutProvidingCredentals(){
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterEmailAddress("");
-        loginPage.enterPassword("");
-        loginPage.clickOnLoginButton();
+        loginPage.login("", "");
 
         String actualWarningMessage = loginPage.getEmailPasswordNotMatchingWarningText();
         String expectedWarningMessage = "Warning: No match for E-Mail Address and/or Password.";

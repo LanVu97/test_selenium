@@ -1,5 +1,6 @@
 package ninja.pages;
 
+import org.checkerframework.checker.units.qual.A;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -39,5 +40,12 @@ public class LoginPage {
 
     public String getEmailPasswordNotMatchingWarningText(){
         return this.emailPasswordNotMatchingWarning.getText();
+    }
+
+    public AccountPage login(String email, String password){
+        this.enterEmailAddress(email);
+        this.enterPassword(password);
+        this.clickOnLoginButton();
+        return new AccountPage(driver);
     }
 }

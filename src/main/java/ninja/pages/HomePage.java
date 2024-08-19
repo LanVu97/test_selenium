@@ -32,12 +32,14 @@ public class HomePage {
         this.myAccountDropdownMenu.click();
     }
 
-    public void selectLoginOption(){
+    public LoginPage selectLoginOption(){
         this.loginOption.click();
+        return new LoginPage(driver);
     }
 
-    public void selectRegisterOption(){
+    public RegisterPage selectRegisterOption(){
         this.registerOption.click();
+        return new RegisterPage(driver);
     }
 
     public void enterSearchBoxField(String searchText){

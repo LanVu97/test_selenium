@@ -123,4 +123,17 @@ public class RegisterPage {
     public String getPasswordWarning(){
         return this.passwordWarning.getText();
     }
+
+    public AccountSuccessPage registerWithMandatoryField(String firstName, String lastName, String email, String telephone, String password, String confirmPassword){
+
+        this.enterFirstName(firstName);
+        this.enterLastName(lastName);
+        this.enterEmailAddress(email);
+        this.enterTelephone(telephone);
+        this.enterPassword(password);
+        this.enterConfirmPassword(confirmPassword);
+        this.selectPrivacyPolicy();
+        this.clickOnContinueButton();
+        return new AccountSuccessPage(driver);
+    }
 }
