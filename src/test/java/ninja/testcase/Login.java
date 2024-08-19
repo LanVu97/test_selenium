@@ -1,10 +1,15 @@
 package ninja.testcase;
 
 import ninja.base.Base;
+import ninja.pages.AccountPage;
+import ninja.pages.HomePage;
+import ninja.pages.LoginPage;
 import ninja.utils.Utilities;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -20,8 +25,10 @@ public class Login extends Base {
     @BeforeMethod
     public void setUp(){
         driver = initializeBroswerAndOpenAppUrl(prop.getProperty("broswername"));
-        driver.findElement(By.xpath("//span[text()='My Account']")).click();
-        driver.findElement(By.linkText("Login")).click();
+        HomePage homePage = new HomePage(driver);
+        homePage.clickOnMyAccount();
+        homePage.selectLoginOption();
+
     }
 
     @AfterMethod
@@ -32,71 +39,61 @@ public class Login extends Base {
     @Test
     public void verifyLoginWithValidCredential(){
 
-        driver.findElement(By.id("input-email")).sendKeys("lan123@gmail.com");
-        driver.findElement(By.id("input-password")).sendKeys("123123");
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.enterEmailAddress("lan123@gmail.com");
+        loginPage.enterPassword("123123");
+        loginPage.clickOnLoginButton();
 
-        driver.findElement(By.xpath("//input[@value='Login']")).click();
-
-        Assert.assertTrue(driver.findElement(By.linkText("Account")).isDisplayed(), "The account page is not displayed");
-        driver.quit();
+        AccountPage accountPage = new AccountPage(driver);
+        Assert.assertTrue(accountPage.isAccountLinkDisplayed(), "The account page is not displayed");
     }
 
     @Test
     public void verifyLoginWithInvalidCredential(){
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.enterEmailAddress(Utilities.generateEmailwithTimeStamp());
+        loginPage.enterPassword("123123333");
+        loginPage.clickOnLoginButton();
 
-        driver.findElement(By.id("input-email")).sendKeys(Utilities.generateEmailwithTimeStamp());
-        driver.findElement(By.id("input-password")).sendKeys("123123333");
-
-        driver.findElement(By.xpath("//input[@value='Login']")).click();
-
-        String actualWarningMessage = driver.findElement(By.xpath("//div[contains(@class,'alert-dismissible')]")).getText();
+        String actualWarningMessage = loginPage.getEmailPasswordNotMatchingWarningText();
         String expectedWarningMessage = "Warning: No match for E-Mail Address and/or Password.";
         Assert.assertTrue(actualWarningMessage.contains(expectedWarningMessage), "The expected message is not displayed");
-        driver.quit();
     }
-
-
 
     @Test
     public void verifyLoginWithInvalidEmailAndValidPassword(){
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.enterEmailAddress(Utilities.generateEmailwithTimeStamp());
+        loginPage.enterPassword("123123");
+        loginPage.clickOnLoginButton();
 
-        driver.findElement(By.id("input-email")).sendKeys(Utilities.generateEmailwithTimeStamp());
-        driver.findElement(By.id("input-password")).sendKeys("123123");
-
-        driver.findElement(By.xpath("//input[@value='Login']")).click();
-
-        String actualWarningMessage = driver.findElement(By.xpath("//div[contains(@class,'alert-dismissible')]")).getText();
+        String actualWarningMessage = loginPage.getEmailPasswordNotMatchingWarningText();
         String expectedWarningMessage = "Warning: No match for E-Mail Address and/or Password.";
         Assert.assertTrue(actualWarningMessage.contains(expectedWarningMessage), "The expected message is not displayed");
-        driver.quit();
     }
 
     @Test
     public void verifyLoginWithValidEmailAndInvalidPassword(){
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.enterEmailAddress("lan1234@gmail.com");
+        loginPage.enterPassword("12312300");
+        loginPage.clickOnLoginButton();
 
-        driver.findElement(By.id("input-email")).sendKeys("lan1234@gmail.com");
-        driver.findElement(By.id("input-password")).sendKeys("12312300");
-
-        driver.findElement(By.xpath("//input[@value='Login']")).click();
-
-        String actualWarningMessage = driver.findElement(By.xpath("//div[contains(@class,'alert-dismissible')]")).getText();
+        String actualWarningMessage = loginPage.getEmailPasswordNotMatchingWarningText();
         String expectedWarningMessage = "Warning: No match for E-Mail Address and/or Password.";
         Assert.assertTrue(actualWarningMessage.contains(expectedWarningMessage), "The expected message is not displayed");
-        driver.quit();
     }
 
     @Test
     public void verifyLoginWithoutProvidingCredentals(){
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.enterEmailAddress("");
+        loginPage.enterPassword("");
+        loginPage.clickOnLoginButton();
 
-        driver.findElement(By.id("input-email")).sendKeys("");
-        driver.findElement(By.id("input-password")).sendKeys("");
-
-        driver.findElement(By.xpath("//input[@value='Login']")).click();
-
-        String actualWarningMessage = driver.findElement(By.xpath("//div[contains(@class,'alert-dismissible')]")).getText();
+        String actualWarningMessage = loginPage.getEmailPasswordNotMatchingWarningText();
         String expectedWarningMessage = "Warning: No match for E-Mail Address and/or Password.";
         Assert.assertTrue(actualWarningMessage.contains(expectedWarningMessage), "The expected message is not displayed");
-        driver.quit();
     }
 
 }

@@ -1,6 +1,8 @@
 package ninja.testcase;
 
 import ninja.base.Base;
+import ninja.pages.HomePage;
+import ninja.pages.SearchPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -25,32 +27,35 @@ public class Search extends Base {
 
     @Test
     public void verifySearchWithValidProduct(){
-        driver.findElement(By.name("search")).sendKeys("HP");
-        driver.findElement(By.xpath("//div[@id='search']/descendant::button")).click();
+        HomePage homePage = new HomePage(driver);
+        homePage.enterSearchBoxField("HP");
+        homePage.clickOnSearch();
 //        driver.findElement(By.xpath("//div[@id='search']//button")).click();
-
-        Assert.assertTrue(driver.findElement(By.xpath("//a[contains(text(), 'HP')]")).isDisplayed(), "Valid product is not displayed in the search");
+        SearchPage searchPage = new SearchPage(driver);
+        Assert.assertTrue(searchPage.displayStatusOfvalidHPProduct(), "Valid product is not displayed in the search");
 
     }
 
     @Test
     public void verifySearchWithInvalidProduct(){
-        driver.findElement(By.name("search")).sendKeys("Fitbit");
-        driver.findElement(By.xpath("//div[@id='search']/descendant::button")).click();
+        HomePage homePage = new HomePage(driver);
+        homePage.enterSearchBoxField("Fitbit");
+        homePage.clickOnSearch();
 
-        String actualSearchMessage = driver.findElement(By.xpath("//div[@id='content']/h2/following-sibling::p")).getText();
-
+        SearchPage searchPage = new SearchPage(driver);
+        String actualSearchMessage = searchPage.getNoProductMessage();
         Assert.assertEquals(actualSearchMessage, "There is no product that matches the search criteria.");
 
     }
 
     @Test
     public void verifySearchWithoutAnyProduct(){
-        driver.findElement(By.name("search")).sendKeys("");
-        driver.findElement(By.xpath("//div[@id='search']/descendant::button")).click();
+        HomePage homePage = new HomePage(driver);
+        homePage.enterSearchBoxField("");
+        homePage.clickOnSearch();
 
-        String actualSearchMessage = driver.findElement(By.xpath("//div[@id='content']/h2/following-sibling::p")).getText();
-
+        SearchPage searchPage = new SearchPage(driver);
+        String actualSearchMessage = searchPage.getNoProductMessage();
         Assert.assertEquals(actualSearchMessage, "There is no product that matches the search criteria.");
 
     }

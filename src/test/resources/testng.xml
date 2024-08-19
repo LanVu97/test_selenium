@@ -2,9 +2,9 @@
 
     <test name="test1">
         <classes>
-            <class name="test.TestRegistry">
+            <class name="ninja.testcase.Login"/>
+            <class name="ninja.testcase.Search"/>
 
-            </class>
         </classes>
     </test>
 </suite>
