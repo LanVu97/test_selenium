@@ -28,6 +28,9 @@ public class RegisterPage {
     @FindBy(xpath= "//input[@name='newsletter'][@value='1']")
     private WebElement yesNewsletterOption;
 
+    @FindBy(xpath= "//input[@name='newsletter'][@value='0']")
+    private WebElement noNewsletterOption;
+
     @FindBy(name = "agree")
     private WebElement privacyPolicyField;
 
@@ -54,6 +57,9 @@ public class RegisterPage {
 
     @FindBy(xpath = "//input[@id='input-password']/following-sibling::div")
     private WebElement passwordWarning;
+
+    @FindBy(xpath = "//input[@id='input-confirm']/following-sibling::div")
+    private WebElement notMatchPasswordWarning;
 
     public RegisterPage(WebDriver driver){
         this.driver = driver;
@@ -86,6 +92,10 @@ public class RegisterPage {
 
     public void selectYesNewsletter(){
         this.yesNewsletterOption.click();
+    }
+
+    public void selectNoNewsletter(){
+        this.noNewsletterOption.click();
     }
 
     public void selectPrivacyPolicy(){
@@ -122,6 +132,10 @@ public class RegisterPage {
 
     public String getPasswordWarning(){
         return this.passwordWarning.getText();
+    }
+
+    public String getNotMatchPasswordWarning(){
+        return this.notMatchPasswordWarning.getText();
     }
 
     public AccountSuccessPage registerWithMandatoryField(String firstName, String lastName, String email, String telephone, String password, String confirmPassword){

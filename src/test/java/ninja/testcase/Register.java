@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class Register extends Base {
@@ -32,7 +33,21 @@ public class Register extends Base {
 
         AccountSuccessPage accountSuccessPage = registerPage.registerWithMandatoryField("Auro", "Nguyen", Utilities.generateEmailwithTimeStamp(),"1234567890", "123123", "123123");
 
+        HomePage homePage = new HomePage(driver);
+        Assert.assertTrue(homePage.isDisplayLogoutOption(), "The logout is not displayed");
+
         Assert.assertEquals(accountSuccessPage.getAccountSuccessPageHeading(), "Your Account Has Been Created!");
+        Assert.assertEquals(accountSuccessPage.getcongradulations(),"Congratulations! Your new account has been successfully created!");
+        Assert.assertEquals(accountSuccessPage.getMemberPrivileges(),"You can now take advantage of member privileges to enhance your online shopping experience with us.");
+        Assert.assertEquals(accountSuccessPage.getMemberQuestions(),"If you have ANY questions about the operation of this online shop, please e-mail the store owner.");
+        Assert.assertEquals(accountSuccessPage.getConfirmationEmail(),"A confirmation has been sent to the provided e-mail address. If you have not received it within the hour, please contact us.");
+        Assert.assertTrue(accountSuccessPage.isDisplayContactUsLink(), "The contact us link is not displayed");
+
+        accountSuccessPage.clickOnContinue();
+        String actualPageTitle = driver.getTitle();
+        String expectedPageTitle = "My Account";
+        Assert.assertEquals(actualPageTitle,expectedPageTitle);
+
     }
 
     @Test
@@ -50,8 +65,17 @@ public class Register extends Base {
         registerPage.clickOnContinueButton();
 
         AccountSuccessPage accountSuccessPage = new AccountSuccessPage(driver);
+        HomePage homePage = new HomePage(driver);
+        Assert.assertTrue(homePage.isDisplayLogoutOption(), "The logout is not displayed");
+
         Assert.assertEquals(accountSuccessPage.getAccountSuccessPageHeading(), "Your Account Has Been Created!");
+        Assert.assertEquals(accountSuccessPage.getcongradulations(),"Congratulations! Your new account has been successfully created!");
+        Assert.assertEquals(accountSuccessPage.getMemberPrivileges(),"You can now take advantage of member privileges to enhance your online shopping experience with us.");
+        Assert.assertEquals(accountSuccessPage.getMemberQuestions(),"If you have ANY questions about the operation of this online shop, please e-mail the store owner.");
+        Assert.assertEquals(accountSuccessPage.getConfirmationEmail(),"A confirmation has been sent to the provided e-mail address. If you have not received it within the hour, please contact us.");
+        Assert.assertTrue(accountSuccessPage.isDisplayContactUsLink(), "The contact us link is not displayed");
     }
+
 
     @Test
     public void verifyRegisterWithExistingEmail(){
@@ -93,5 +117,56 @@ public class Register extends Base {
         String expectedPasswordWarning = "Password must be between 4 and 20 characters!";
         Assert.assertTrue(actualPasswordWarning.contains(expectedPasswordWarning), "The password warning is not displayed");
 
+    }
+
+    @Test
+    public void registerAccountBySelectingNoNewsletterOption(){
+
+        RegisterPage registerPage = new RegisterPage(driver);
+        registerPage.enterFirstName("Auro");
+        registerPage.enterLastName("Nguyen");
+        registerPage.enterEmailAddress(Utilities.generateEmailwithTimeStamp());
+        registerPage.enterTelephone("1234567890");
+        registerPage.enterPassword("123123");
+        registerPage.enterConfirmPassword("123123");
+        registerPage.selectNoNewsletter();
+        registerPage.selectPrivacyPolicy();
+        registerPage.clickOnContinueButton();
+
+        AccountSuccessPage accountSuccessPage = new AccountSuccessPage(driver);
+        HomePage homePage = new HomePage(driver);
+        Assert.assertTrue(homePage.isDisplayLogoutOption(), "The logout is not displayed");
+
+        Assert.assertEquals(accountSuccessPage.getAccountSuccessPageHeading(), "Your Account Has Been Created!");
+        Assert.assertEquals(accountSuccessPage.getcongradulations(),"Congratulations! Your new account has been successfully created!");
+        Assert.assertEquals(accountSuccessPage.getMemberPrivileges(),"You can now take advantage of member privileges to enhance your online shopping experience with us.");
+        Assert.assertEquals(accountSuccessPage.getMemberQuestions(),"If you have ANY questions about the operation of this online shop, please e-mail the store owner.");
+        Assert.assertEquals(accountSuccessPage.getConfirmationEmail(),"A confirmation has been sent to the provided e-mail address. If you have not received it within the hour, please contact us.");
+        Assert.assertTrue(accountSuccessPage.isDisplayContactUsLink(), "The contact us link is not displayed");
+    }
+
+    @Test
+    public void registerAccountByProvidingMismatchingPasswords(){
+
+        registerPage.registerWithMandatoryField("Auro", "Nguyen", Utilities.generateEmailwithTimeStamp(),"1234567890", "123123", "1231237");
+
+        Assert.assertEquals(registerPage.getNotMatchPasswordWarning(), "Password confirmation does not match password!");
+
+    }
+
+    @Test(dataProvider="invalidEmailSupplier")
+    public void registerAccountUsingInvalidEmailAddress(String invalidEmail){
+
+        registerPage.registerWithMandatoryField("Auro", "Nguyen", invalidEmail,"1234567890", "123123", "123123");
+
+        Assert.assertEquals(registerPage.getEmailWarning(), "E-Mail Address does not appear to be valid!");
+
+    }
+
+    @DataProvider(name="invalidEmailSupplier")
+    public String[] supplyInvalidEmailData() {
+
+        String[] invalidEmails = {"user.@example.com","amotoori@gmail",".user@example.com", "useruseruseruseruseruseruseruseruseruseruseruseruser1234567890000@example.com"};
+        return invalidEmails;
     }
 }

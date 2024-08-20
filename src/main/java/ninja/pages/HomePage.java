@@ -17,6 +17,9 @@ public class HomePage {
     @FindBy(linkText = "Register")
     private WebElement registerOption;
 
+    @FindBy(linkText = "Logout")
+    private WebElement logoutOption;
+
     @FindBy(name = "search")
     private WebElement searchBoxField;
 
@@ -30,6 +33,10 @@ public class HomePage {
 
     public void clickOnMyAccount(){
         this.myAccountDropdownMenu.click();
+    }
+
+    public boolean isDisplayLogoutOption(){
+        return this.logoutOption.isDisplayed();
     }
 
     public LoginPage selectLoginOption(){
