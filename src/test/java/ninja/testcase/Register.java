@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 
 public class Register extends Base {
 
-    WebDriver driver;
+    public WebDriver driver;
     RegisterPage registerPage;
     @BeforeMethod
     public void setUp(){
@@ -28,7 +28,7 @@ public class Register extends Base {
         driver.quit();
     }
 
-    @Test
+    @Test(priority = 1)
     public void verifyRegisterWithMandatoryField(){
 
         AccountSuccessPage accountSuccessPage = registerPage.registerWithMandatoryField("Auro", "Nguyen", Utilities.generateEmailwithTimeStamp(),"1234567890", "123123", "123123");
@@ -50,7 +50,7 @@ public class Register extends Base {
 
     }
 
-    @Test
+    @Test(priority = 2)
     public void verifyRegisterWithAllField(){
 
         RegisterPage registerPage = new RegisterPage(driver);
@@ -77,7 +77,7 @@ public class Register extends Base {
     }
 
 
-    @Test
+    @Test(priority = 3)
     public void verifyRegisterWithExistingEmail(){
 
      registerPage.registerWithMandatoryField("Auro", "Nguyen", "lan123@gmail.com","1234567890", "123123", "123123");
@@ -87,7 +87,7 @@ public class Register extends Base {
         Assert.assertTrue(actualWarningMessage.contains(expectedWarningMessage), "The expected message is not displayed");
     }
 
-    @Test
+    @Test(priority = 4)
     public void verifyRegisterWithoutFillingAnyFields(){
 
         RegisterPage registerPage = new RegisterPage(driver);
@@ -119,7 +119,7 @@ public class Register extends Base {
 
     }
 
-    @Test
+    @Test(priority = 5)
     public void registerAccountBySelectingNoNewsletterOption(){
 
         RegisterPage registerPage = new RegisterPage(driver);
@@ -145,7 +145,7 @@ public class Register extends Base {
         Assert.assertTrue(accountSuccessPage.isDisplayContactUsLink(), "The contact us link is not displayed");
     }
 
-    @Test
+    @Test(priority = 6)
     public void registerAccountByProvidingMismatchingPasswords(){
 
         registerPage.registerWithMandatoryField("Auro", "Nguyen", Utilities.generateEmailwithTimeStamp(),"1234567890", "123123", "1231237");
@@ -154,7 +154,7 @@ public class Register extends Base {
 
     }
 
-    @Test(dataProvider="invalidEmailSupplier")
+    @Test(dataProvider="invalidEmailSupplier", priority = 7)
     public void registerAccountUsingInvalidEmailAddress(String invalidEmail){
 
         registerPage.registerWithMandatoryField("Auro", "Nguyen", invalidEmail,"1234567890", "123123", "123123");

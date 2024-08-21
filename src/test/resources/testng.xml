@@ -1,8 +1,11 @@
 <suite name="Suite1">
-
+    <listeners>
+        <listener class-name="ninja.listeners.MyListener" />
+    </listeners>
     <test name="test1">
         <classes>
             <class name="ninja.testcase.Login"/>
+            <class name="ninja.testcase.Register"/>
             <class name="ninja.testcase.Search"/>
 
         </classes>

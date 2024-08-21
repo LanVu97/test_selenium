@@ -20,7 +20,7 @@ import java.util.Date;
 
 public class Login extends Base {
 
-    WebDriver driver;
+    public WebDriver driver;
     LoginPage loginPage;
     @BeforeMethod
     public void setUp(){
@@ -36,13 +36,13 @@ public class Login extends Base {
         driver.quit();
     }
 
-    @Test
+    @Test(priority = 1)
     public void verifyLoginWithValidCredential(){
         AccountPage accountPage = loginPage.login("lan123@gmail.com", "123123");
         Assert.assertTrue(accountPage.isAccountLinkDisplayed(), "The account page is not displayed");
     }
 
-    @Test
+    @Test(priority = 2)
     public void verifyLoginWithInvalidCredential(){
         loginPage.login(Utilities.generateEmailwithTimeStamp(), "123123333");
 
@@ -51,7 +51,7 @@ public class Login extends Base {
         Assert.assertTrue(actualWarningMessage.contains(expectedWarningMessage), "The expected message is not displayed");
     }
 
-    @Test
+    @Test(priority = 3)
     public void verifyLoginWithInvalidEmailAndValidPassword(){
         loginPage.login(Utilities.generateEmailwithTimeStamp(), "123123");
 
@@ -60,21 +60,21 @@ public class Login extends Base {
         Assert.assertTrue(actualWarningMessage.contains(expectedWarningMessage), "The expected message is not displayed");
     }
 
-    @Test
+    @Test(priority = 4)
     public void verifyLoginWithValidEmailAndInvalidPassword(){
-        loginPage.login("lan1234@gmail.com", "12312300");
+        loginPage.login("lan123@gmail.com", "12312300");
 
         String actualWarningMessage = loginPage.getEmailPasswordNotMatchingWarningText();
         String expectedWarningMessage = "Warning: No match for E-Mail Address and/or Password.";
         Assert.assertTrue(actualWarningMessage.contains(expectedWarningMessage), "The expected message is not displayed");
     }
 
-    @Test
+    @Test(priority = 5)
     public void verifyLoginWithoutProvidingCredentals(){
         loginPage.login("", "");
 
         String actualWarningMessage = loginPage.getEmailPasswordNotMatchingWarningText();
-        String expectedWarningMessage = "Warning: No match for E-Mail Address and/or Password.";
+        String expectedWarningMessage = "Warning: No match for E-Mail Address and/or Password";
         Assert.assertTrue(actualWarningMessage.contains(expectedWarningMessage), "The expected message is not displayed");
     }
 

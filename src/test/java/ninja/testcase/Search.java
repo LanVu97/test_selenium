@@ -12,7 +12,7 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 public class Search extends Base {
-    WebDriver driver;
+    public WebDriver driver;
 
     @BeforeMethod
     public void setUp(){
@@ -25,7 +25,7 @@ public class Search extends Base {
         driver.quit();
     }
 
-    @Test
+    @Test(priority = 1)
     public void verifySearchWithValidProduct(){
         HomePage homePage = new HomePage(driver);
         homePage.enterSearchBoxField("HP");
@@ -36,7 +36,7 @@ public class Search extends Base {
 
     }
 
-    @Test
+    @Test(priority = 2)
     public void verifySearchWithInvalidProduct(){
         HomePage homePage = new HomePage(driver);
         homePage.enterSearchBoxField("Fitbit");
@@ -48,7 +48,7 @@ public class Search extends Base {
 
     }
 
-    @Test
+    @Test(priority = 3)
     public void verifySearchWithoutAnyProduct(){
         HomePage homePage = new HomePage(driver);
         homePage.enterSearchBoxField("");
